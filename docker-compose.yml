@@ -1,0 +1,53 @@
+volumes:
+  pg-data:
+  redis-data:
+  backend-data:
+
+networks:
+  pg-net:
+    driver: bridge
+  redis-net:
+    driver: bridge
+  backend-net:
+    driver: bridge
+
+services:
+  pg:
+    image: postgres:18.4-trixie
+    container_name: revlek-pg
+    restart: unless-stopped
+    ports:
+      - 5432:5432
+    volumes:
+      - pg-data:/var/lib/postgresql
+    env_file:
+      - ./.revlek/.pg.env
+    networks:
+      - pg-net
+  redis:
+    image: redis:8.8.0-trixie
+    container_name: revlek-redis
+    restart: unless-stopped
+    ports:
+      - 6379:6379
+    volumes:
+      - redis-data:/data
+    networks:
+      - redis-net
+  backend:
+    image: ghcr.io/mmxniloy/revlek-website-backend:latest
+    container_name: revlek-backend
+    restart: unless-stopped
+    depends_on:
+      - pg
+      - redis
+    ports:
+      - 5000:5000
+    volumes:
+      - backend-data:/usr/src/app/uploads
+    env_file:
+      - ./.revlek/.backend.env
+    networks:
+      - backend-net
+      - pg-net
+      - redis-net
