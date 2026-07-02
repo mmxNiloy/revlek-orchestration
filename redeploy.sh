@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 set -e  # Exit on error
+sudo -v
 
 PROJECT_NAME="revlek"
 COMPOSE_FILE="docker-compose.yml"
