@@ -51,3 +51,13 @@ services:
       - backend-net
       - pg-net
       - redis-net
+  admin:
+    image: ghcr.io/mmxniloy/revlek-website-admin:latest
+    container_name: revlek-admin
+    restart: unless-stopped
+    ports:
+      - 8000:5000
+    env_file:
+      - ./.revlek/.admin.env
+    networks:
+      - backend-net
