@@ -56,8 +56,18 @@ services:
     container_name: revlek-admin
     restart: unless-stopped
     ports:
-      - 8000:5000
+      - 8000:3000
     env_file:
       - ./.revlek/.admin.env
+    networks:
+      - backend-net
+  web:
+    image: ghcr.io/ismail-bs/revlek-website:latest
+    container_name: revlek-web
+    restart: unless-stopped
+    ports:
+      - 3000:3000
+    env_file:
+      - ./.revlek/.web.env
     networks:
       - backend-net
